@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpha Run Club | Pune Leaderboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-primary: #FF1744;
+            --brand-secondary: #C2185B;
+            --brand-accent: #FF5722;
+            --background: #FFFFFF;
+            --surface: #F8F9FA;
+            --text: #212121;
+            --text-secondary: #666666;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--surface) 0%, #ffffff 100%);
+            min-height: 100vh;
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--background);
+            box-shadow: 0 20px 60px var(--shadow);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M30 0l30 30-30 30L0 30z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(-60px) translateY(-60px); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .brand-logo {
+            margin-bottom: 20px;
+        }
+
+        .logo-diamond {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #ffffff, #f0f0f0);
+            transform: rotate(45deg);
+            margin: 0 auto;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .header-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        /* Tabs */
+        .tab-navigation {
+            display: flex;
+            background: var(--surface);
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .tab.tab-active {
+            color: var(--brand-primary);
+            background: var(--background);
+        }
+
+        .tab.tab-active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
+        }
+
+        .tab:hover {
+            background: #f0f0f0;
+        }
+
+        .tab.tab-active:hover {
+            background: var(--background);
+        }
+
+        /* Tab Content */
+        .tab-container {
+            padding: 40px 20px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.tab-content-active {
+            display: block;
+        }
+
+        /* Podium */
+        .podium-container {
+            display: flex;
+            justify-content: center;
+            align-items: end;
+            margin-bottom: 50px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .podium-place {
+            text-align: center;
+            color: white;
+            border-radius: 20px;
+            padding: 30px 20px;
+            min-width: 180px;
+            position: relative;
+            overflow: hidden;
+            transform: perspective(1000px) rotateX(5deg);
+            transition: transform 0.3s ease;
+        }
+
+        .podium-place:hover {
+            transform: perspective(1000px) rotateX(0deg) scale(1.05);
+        }
+
+        .podium-first {
+            background: linear-gradient(135deg, #FFD700, #FFA000);
+            color: #333;
+            height: 200px;
+            order: 2;
+        }
+
+        .podium-second {
+            background: linear-gradient(135deg, #C0C0C0, #9E9E9E);
+            color: #333;
+            height: 170px;
+            order: 1;
+        }
+
+        .podium-third {
+            background: linear-gradient(135deg, #CD7F32, #FF8C42);
+            height: 140px;
+            order: 3;
+        }
+
+        .podium-rank {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .podium-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .podium-runs {
+            font-size: 1rem;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        /* Leaderboard Table */
+        .leaderboard-table {
+            background: var(--background);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px var(--shadow);
+        }
+
+        .leaderboard-header {
+            background: var(--surface);
+            padding: 25px 30px;
+            border-bottom: 2px solid #e0e0e0;
+            font-weight: 700;
+            color: var(--text);
+            display: grid;
+            grid-template-columns: 80px 1fr 120px;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .leaderboard-row {
+            padding: 20px 30px;
+            border-bottom: 1px solid #f0f0f0;
+            display: grid;
+            grid-template-columns: 80px 1fr 120px;
+            gap: 20px;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .leaderboard-row:hover {
+            background: var(--surface);
+            transform: translateX(5px);
+        }
+
+        .leaderboard-row:last-child {
+            border-bottom: none;
+        }
+
+        .rank {
+            font-weight: 700;
+            color: var(--brand-primary);
+            font-size: 1.3rem;
+        }
+
+        .name {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 1.1rem;
+        }
+
+        .runs {
+            text-align: center;
+            font-weight: 700;
+            color: var(--brand-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 40px;
+            padding: 30px 20px;
+            border-top: 2px solid var(--surface);
+            background: var(--surface);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2rem;
+            }
+            
+            .podium-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .podium-place {
+                width: 100%;
+                max-width: 300px;
+                height: auto !important;
+                margin-bottom: 15px;
+                order: unset !important;
+            }
+            
+            .leaderboard-header,
+            .leaderboard-row {
+                grid-template-columns: 60px 1fr 80px;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+
+            .tab {
+                font-size: 1rem;
+                padding: 15px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="header-content">
+                <div class="brand-logo">
+                    <div class="logo-diamond"></div>
+                </div>
+                <h1 class="header-title">ALPHA RUN CLUB</h1>
+                <p class="header-subtitle">PUNE'S RUNNING COMMUNITY</p>
+            </div>
+        </header>
+
+        <!-- Tab Navigation -->
+        <nav class="tab-navigation">
+            <button class="tab tab-active" data-tab="all-time">
+                🏆 ALL-TIME CHAMPIONS
+            </button>
+            <button class="tab" data-tab="monthly">
+                ⚡ MONTHLY HEROES
+            </button>
+        </nav>
+
+        <!-- Tab Content Container -->
+        <main class="tab-container">
+            <!-- All-Time Tab Content -->
+            <div id="all-time" class="tab-content tab-content-active">
+                <section class="leaderboard-section">
+                    <!-- Podium Section -->
+                    <div class="podium-container">
+                        <div class="podium-place podium-second">
+                            <div class="podium-rank">2nd</div>
+                            <div class="podium-name">Roshan Vijay Jadhav</div>
+                            <div class="podium-runs">60 runs</div>
+                        </div>
+                        <div class="podium-place podium-first">
+                            <div class="podium-rank">1st</div>
+                            <div class="podium-name">Ajay Therolkar</div>
+                            <div class="podium-runs">62 runs</div>
+                        </div>
+                        <div class="podium-place podium-third">
+                            <div class="podium-rank">3rd</div>
+                            <div class="podium-name">Parth Mahadik</div>
+                            <div class="podium-runs">59 runs</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Full Leaderboard -->
+                    <div class="leaderboard-table">
+                        <div class="leaderboard-header">
+                            <div>Rank</div>
+                            <div>Runner Name</div>
+                            <div>Total Runs</div>
+                        </div>
+                        <div id="all-time-leaderboard">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- Monthly Tab Content -->
+            <div id="monthly" class="tab-content">
+                <section class="leaderboard-section">
+                    <!-- Podium Section -->
+                    <div class="podium-container">
+                        <div class="podium-place podium-second">
+                            <div class="podium-rank">2nd</div>
+                            <div class="podium-name">Ayasha Sachdev</div>
+                            <div class="podium-runs">14 runs</div>
+                        </div>
+                        <div class="podium-place podium-first">
+                            <div class="podium-rank">1st</div>
+                            <div class="podium-name">Rahul Patni</div>
+                            <div class="podium-runs">14 runs</div>
+                        </div>
+                        <div class="podium-place podium-third">
+                            <div class="podium-rank">3rd</div>
+                            <div class="podium-name">Mayuresh Kanhere</div>
+                            <div class="podium-runs">14 runs</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Full Leaderboard -->
+                    <div class="leaderboard-table">
+                        <div class="leaderboard-header">
+                            <div>Rank</div>
+                            <div>Runner Name</div>
+                            <div>This Month</div>
+                        </div>
+                        <div id="monthly-leaderboard">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+        
+        <div class="footer">
+            Last updated: September 15, 2025 | Alpha Run Club Pune
+        </div>
+    </div>
+
+    <script>
+        // Alpha Run Club Leaderboard Data
+        const leaderboardData = {
+            allTime: [
+                { rank: 1, name: "Ajay Therolkar", runs: 62 },
+                { rank: 2, name: "Roshan Vijay Jadhav", runs: 60 },
+                { rank: 3, name: "Parth Mahadik", runs: 59 },
+                { rank: 4, name: "Gaurav Jain", runs: 58 },
+                { rank: 5, name: "Sunoj Tomar", runs: 55 },
+                { rank: 6, name: "Dev Patil", runs: 53 },
+                { rank: 7, name: "Bhakti Dalvi", runs: 52 },
+                { rank: 8, name: "Ameeta Agarwal", runs: 50 },
+                { rank: 9, name: "Aryan Devne", runs: 49 },
+                { rank: 10, name: "Chhaya Gawalgadade", runs: 44 },
+                { rank: 11, name: "Yashraj Raje", runs: 42 },
+                { rank: 12, name: "Naitik Vaswani", runs: 38 }
+            ],
+            monthly: [
+                { rank: 1, name: "Rahul Patni", runs: 14 },
+                { rank: 2, name: "Ayasha Sachdev", runs: 14 },
+                { rank: 3, name: "Mayuresh Kanhere", runs: 14 },
+                { rank: 4, name: "Yashraj Dhamale", runs: 14 },
+                { rank: 5, name: "Naitik Vaswani", runs: 13 },
+                { rank: 6, name: "Gaurav Jain", runs: 13 },
+                { rank: 7, name: "Piyush Bhavnani", runs: 13 },
+                { rank: 8, name: "Ishan Nikam", runs: 13 },
+                { rank: 9, name: "Roshan Vijay Jadhav", runs: 12 },
+                { rank: 10, name: "Sakshi Ganeshwadi", runs: 11 },
+                { rank: 11, name: "Akash Kadam", runs: 10 },
+                { rank: 12, name: "Saniya Sohani", runs: 9 }
+            ]
+        };
+
+        // Initialize the application
+        class AlphaRunClubApp {
+            constructor() {
+                this.currentTab = 'all-time';
+                this.init();
+            }
+
+            init() {
+                console.log('🏃‍♂️ Alpha Run Club Leaderboard Loading...');
+                this.setupTabNavigation();
+                this.populateLeaderboards();
+                console.log('✅ Alpha Run Club Leaderboard Ready!');
+            }
+
+            setupTabNavigation() {
+                const tabs = document.querySelectorAll('.tab');
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const targetTab = tab.getAttribute('data-tab');
+                        this.switchTab(targetTab);
+                    });
+                });
+            }
+
+            switchTab(tabName) {
+                // Remove active classes
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.classList.remove('tab-active');
+                });
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('tab-content-active');
+                });
+
+                // Add active classes
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('tab-active');
+                document.getElementById(tabName).classList.add('tab-content-active');
+
+                this.currentTab = tabName;
+            }
+
+            populateLeaderboards() {
+                this.populateAllTime();
+                this.populateMonthly();
+            }
+
+            populateAllTime() {
+                const container = document.getElementById('all-time-leaderboard');
+                container.innerHTML = '';
+
+                leaderboardData.allTime.forEach(runner => {
+                    const row = document.createElement('div');
+                    row.className = 'leaderboard-row';
+                    row.innerHTML = `
+                        <div class="rank">${runner.rank}</div>
+                        <div class="name">${runner.name}</div>
+                        <div class="runs">${runner.runs}</div>
+                    `;
+                    container.appendChild(row);
+                });
+            }
+
+            populateMonthly() {
+                const container = document.getElementById('monthly-leaderboard');
+                container.innerHTML = '';
+
+                leaderboardData.monthly.forEach(runner => {
+                    const row = document.createElement('div');
+                    row.className = 'leaderboard-row';
+                    row.innerHTML = `
+                        <div class="rank">${runner.rank}</div>
+                        <div class="name">${runner.name}</div>
+                        <div class="runs">${runner.runs}</div>
+                    `;
+                    container.appendChild(row);
+                });
+            }
+        }
+
+        // Start the application when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new AlphaRunClubApp();
+        });
+    </script>
+</body>
+</html>
